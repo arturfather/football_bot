@@ -577,8 +577,7 @@ def add_game_handler(message):
         user, username, first_name, last_name, full_name = extract_msg_metadata(message)
 
         bot.send_message(chat_id=message.from_user.id, text=adder_game_succ, parse_mode='HTML', disable_web_page_preview=True)
-        bot.send_message(chat_id=grpID,
-                         text='Пользователь <b>' + full_name + ' (@' + username + ')</b> добавил новую тренировку ✅\n\n 🗓' + format_date1(new_dt) + " 🕖 " + new_tm + ", 📍" + new_loc + '\n\nЗаписаться  / отменить запись - через бота:\n<b>' + bot_name_val + '</b>', parse_mode='HTML', disable_web_page_preview=True)
+        bot.send_message(chat_id=grpID, text='ДОБАВЛЕНА НОВАЯ ТРЕНИРОВКА ✅\n\n 🗓' + format_date1(new_dt) + " 🕖 " + new_tm + ", 📍" + new_loc + '\n\nЗаписаться  / отменить запись - через бота:\n<b>' + bot_name_val + '</b>', parse_mode='HTML', disable_web_page_preview=True)
 
     # error - format not matched
     else:
@@ -614,8 +613,7 @@ def remove_game_handler(message):
             user, username, first_name, last_name, full_name = extract_msg_metadata(message)
 
             bot.send_message(chat_id=message.from_user.id, text=rmv_game_succ, parse_mode='HTML', disable_web_page_preview=True)
-            bot.send_message(chat_id=grpID,
-                             text='Пользователь <b>' + full_name + ' (@' + username + ')</b> удалил тренировку ❌\n\n' + gm_to_remove, parse_mode='HTML', disable_web_page_preview=True)
+            bot.send_message(chat_id=grpID, text='ТРЕНИРОВКА УДАЛЕНА ❌\n\n' + gm_to_remove, parse_mode='HTML', disable_web_page_preview=True)
 
     global lock_holder
     lock_holder = None
