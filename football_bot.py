@@ -4,7 +4,7 @@ from datetime import datetime
 from telebot import types
 from jsons_handlers.jsons_handlers import json_reader, json_writer
 
-ENV = 'PROD'
+ENV = 'UAT'
 
 
 # static files/variable difinition
@@ -219,10 +219,10 @@ repl_err2 = '_______________________\n<b>Максимальное количес
 repl_err4 = 'Запись на следующую тренировку будет доступна завтра :)'
 repl_err5 = 'К сожалению ты не являешься участником группы. Пожалуйста, вступите в <a href="' + grp_for_appl_link + '">группу</a> для записи/отмены записи на тренировку &#9940;'
 
-repl_txt15 = '_______________________\n<b>Готово! Записал тебя на следующую тренировку☺\n\n❗ ПОЖАЛУЙСТА, НЕ ОПАЗДЫВАЙТЕ ❗️</b>'
+repl_txt15 = '<b>Готово! Записал тебя на следующую тренировку☺\n\n❗ ПОЖАЛУЙСТА, НЕ ОПАЗДЫВАЙ ❗️</b>'
 repl_err7 = 'OK &#128076;'
-repl_txt16 = '_______________________\n<b>Готово! Одна твоя запись отменена ❌</b>'
-rerepl_err8 = '<b>Не нашел твоей записи на тренировку 😕</b>\n_______________________'
+repl_txt16 = '<b>Готово! Одна твоя запись отменена ❌</b>'
+rerepl_err8 = '<b>Не нашел твоей записи на тренировку 😕</b>'
 repl_txt17 = 'Пиши мне напрямую \n' + bot_name_val + '\nБуду рад помочь &#128522; \n\n<i>сообщение удалится через {count}сек</i>'
 repl_txt18 = 'Привет! Я помощник Футбол Мякинино парк. Чем могу помочь? 😊 \n Воспользуйтесь кнопочками внизу ↘️'
 repl_txt19 = 'Пожалуйста, выберите дату тренировки'
@@ -334,7 +334,7 @@ def MSG_HANDLER(message):
     print('------', datetime.now(), 'AT THE END OF MSG HANDLER: username=', username, ' | CurUsrCont.usr_prm=', CurUsrCont.usr_prm, ' | CurUsrCont.usr_desc_inp=', CurUsrCont.usr_desc_inp, ' | lock_holder=', lock_holder)
 
 
-################################HANDLERS ############################################################
+################################ HANDLERS ############################################################
 
 # application to training request handler
 def application_handler(message, CurUsrCont):
@@ -347,10 +347,21 @@ def application_handler(message, CurUsrCont):
     gms_json_data, game_data, gmid, gdesc, dateID, timeID, priceID, locationID, pl_IDs, rpl_IDs, players_list, res_pl_list, maxpl, maxrsrv, dur, sts, appl_list_main_msg, text_appl_err3 = games_extract(message, CurUsrCont.usr_desc_inp)
 
     print('------', datetime.now(), 'within application  handler function - username=', username, ' | CurUsrCont.usr_prm=', CurUsrCont.usr_prm, ' | CurUsrCont.usr_desc_inp=', CurUsrCont.usr_desc_inp)
-
-    if (bot.get_chat_member(grpID, user.id)).status not in alwd_members: text_apply_msg = repl_err5  # user not present in group. err5
-    elif len(pl_IDs) >= maxpl and len(rpl_IDs) >= maxrsrv:  text_apply_msg = text_appl_err3  # no space in main / reservation lists. err3
     
+    # user not present in group. err5
+    if (bot.get_chat_member(grpID, user.id)).status not in alwd_members:
+        text_apply_msg = repl_err5  
+    
+    # no space in main / reservation lists. err3
+    elif len(pl_IDs) >= maxpl and len(rpl_IDs) >= maxrsrv:
+        text_apply_msg = text_appl_err3  
+    
+    #no username added
+    elif not username:
+        bot.send_message(chat_id=message.chat.id, text='У вас нет имени пользователя. Пожалуйста добавьте имя пользователя', parse_mode='HTML', disable_web_page_preview=True, reply_markup=keyboard1)
+        with open('assets/no_nick.jpg', 'rb') as photo:
+            bot.send_photo(chat_id=message.chat.id, photo=photo, caption='Настройки ➡️ Имя пользователя')
+        return
 
     else:
         if len(pl_IDs) < maxpl:  # to add to the reserve list
@@ -577,7 +588,8 @@ def add_game_handler(message):
         user, username, first_name, last_name, full_name = extract_msg_metadata(message)
 
         bot.send_message(chat_id=message.from_user.id, text=adder_game_succ, parse_mode='HTML', disable_web_page_preview=True)
-        bot.send_message(chat_id=grpID, text='ДОБАВЛЕНА НОВАЯ ТРЕНИРОВКА ✅\n\n 🗓' + format_date1(new_dt) + " 🕖 " + new_tm + ", 📍" + new_loc + '\n\nЗаписаться  / отменить запись - через бота:\n<b>' + bot_name_val + '</b>', parse_mode='HTML', disable_web_page_preview=True)
+        bot.send_message(chat_id=grpID,
+                         text='Новая тренировка: ✅\n\n 🗓' + format_date1(new_dt) + " 🕖 " + new_tm + ", 📍" + new_loc + '\n\nЗаписаться  / отменить запись - через бота:\n<b>' + bot_name_val + '</b>', parse_mode='HTML', disable_web_page_preview=True)
 
     # error - format not matched
     else:
@@ -613,7 +625,8 @@ def remove_game_handler(message):
             user, username, first_name, last_name, full_name = extract_msg_metadata(message)
 
             bot.send_message(chat_id=message.from_user.id, text=rmv_game_succ, parse_mode='HTML', disable_web_page_preview=True)
-            bot.send_message(chat_id=grpID, text='ТРЕНИРОВКА УДАЛЕНА ❌\n\n' + gm_to_remove, parse_mode='HTML', disable_web_page_preview=True)
+            bot.send_message(chat_id=grpID,
+                             text='ТРЕНИРОВКА УДАЛЕНА ❌\n\n' + gm_to_remove, parse_mode='HTML', disable_web_page_preview=True)
 
     global lock_holder
     lock_holder = None

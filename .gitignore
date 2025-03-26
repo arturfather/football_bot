@@ -1,0 +1,9 @@
+#ignore venv
+venv
+
+#ignore jsons_data
+jsons_data/*
+
+
+#ignore log files change
+logs/*
