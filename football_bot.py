@@ -210,7 +210,7 @@ usr_prm = None
 user_contexts = {}
 
 bot_name_val = '@football_MP_test_bot' if ENV == 'UAT' else '@football_MP_bot'
-grp_for_appl_link = 'https://t.me/+UagC-5vXZpA3NjBi' if ENV == 'UAT' else 'https://t.me/+jIz9aDY0m5xlMzgy'
+grp_for_appl_link = 'https://t.me/+yxU5j6A8W0s1NDgy' if ENV == 'UAT' else 'https://t.me/+jIz9aDY0m5xlMzgy'
 repl_txt1 = '<b>Общая информация</b> \n \n1. Собираемся и играем в футбол на школе МП\n \n2. Возраст: строго 16+ \n \n3. Уровень - любой. Рады всем :) \n \n4. Для того чтобы записаться или отменить запись: напиши сюда ' + bot_name_val +'\n \n ⚽️ У нас дружная атмосфера - рады всем. ⚽️\n \n По всем остальным вопросам пиши личным сообщением @arturfather)'
 repl_txt4 = None
 repl_txt6 = None
