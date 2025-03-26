@@ -363,6 +363,7 @@ def application_handler(message, CurUsrCont):
             bot.send_photo(chat_id=message.chat.id, photo=photo, caption='Настройки ➡️ Имя пользователя')
         return
 
+    
     else:
         if len(pl_IDs) < maxpl:  # to add to the reserve list
             game_data['players'].append(['@' + username + ' ' + full_name, user.id, False])
