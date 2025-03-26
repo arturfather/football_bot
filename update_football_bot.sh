@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Navigate to the project directory
-cd /root/my_bots/football_bot || {
-    echo "Directory not found: /root/my_bots/football_bot"
+cd /root/my_bots/football_mp || {
+    echo "Directory not found: /root/my_bots/football_mp"
     exit 1
 }
 
