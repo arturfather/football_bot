@@ -4,7 +4,7 @@ from datetime import datetime
 from telebot import types
 from jsons_handlers.jsons_handlers import json_reader, json_writer
 
-ENV = 'UAT'
+ENV = 'PROD'
 
 
 # static files/variable difinition
