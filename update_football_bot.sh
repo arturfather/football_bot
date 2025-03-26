@@ -13,4 +13,4 @@ git fetch
 git pull
 
 #Restart service
-sudo systemctl restart football.service
+sudo systemctl restart football_bot.service
