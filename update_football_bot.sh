@@ -14,3 +14,4 @@ git pull
 
 #Restart service
 sudo systemctl restart football.service
+
