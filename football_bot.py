@@ -378,13 +378,9 @@ def application_handler(message, CurUsrCont):
         with open('assets/no_nick.jpg', 'rb') as photo:
             bot.send_photo(chat_id=message.chat.id, photo=photo, caption='Настройки ➡️ Имя пользователя')
         
-        CurUsrCont.usr_prm = None
-        CurUsrCont.usr_desc_inp = None
-        global lock_holder
-        lock_holder = None
+        text_apply_msg = 'nousername'
 
-
-    
+   
     else:
         if len(pl_IDs) < maxpl:  # to add to the reserve list
             game_data['players'].append(['@' + username + ' ' + full_name, user.id, False])
@@ -403,7 +399,9 @@ def application_handler(message, CurUsrCont):
         bot.send_message(chat_id=message.chat.id, text=appl_list_main_msg, parse_mode='HTML', disable_web_page_preview=True, reply_markup=keyboard1)
         bot.send_message(chat_id=message.chat.id, text=text_apply_msg, parse_mode='HTML', disable_web_page_preview=True, reply_markup=keyboard1)
           
-    
+    elif text_apply_msg == 'nousername':
+        pass
+
     else:
         bot.send_message(chat_id=message.chat.id, text=appl_list_main_msg, parse_mode='HTML', disable_web_page_preview=True, reply_markup=keyboard1)
         bot.send_message(chat_id=message.chat.id, text=text_apply_msg, parse_mode='HTML', disable_web_page_preview=True, reply_markup=keyboard1)
