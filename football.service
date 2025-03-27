@@ -1,14 +1,16 @@
 [Unit]
-Description=Volleyball Bot by arthurmp3
-After=syslog.target
-After=network.target
+Description=football Bot by arthurmp3
+After=syslog.target network.target
 
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/root/my_bots/football_mp
-ExecStart=/root/my_bots/football_mp/venv/bin/python3 football_bot.py
+WorkingDirectory=/root/my_bots/football_bot
+ExecStart=/root/my_bots/football_bot/venv/bin/python3 /root/my_bots/football_bot/football_bot.py
 Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/football_bot.log 
+StandardError=append:/var/log/football_bot.log
 
 [Install]
 WantedBy=multi-user.target

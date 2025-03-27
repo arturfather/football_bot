@@ -3,6 +3,7 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 from datetime import datetime
 from telebot import types
 from jsons_handlers.jsons_handlers import json_reader, json_writer
+from datetime import timedelta
 
 ENV = 'PROD'
 
@@ -53,9 +54,6 @@ def log_any_incm(message):
     log = str(now) + ' || GROUP ID:' + str(message.chat.id) + '|| GROUP_msg: userID:' + str(message.from_user.id) + '|| nick: @' + str(username) + '|| fname:' + str(full_name) + '|| message:' + str(message.text)
     print(log)
     with open(log_file, 'a', encoding='utf-8') as file: file.write(log + '\n')
-
-
-
 
 
 
@@ -115,6 +113,12 @@ def code_execution_lock(message):
             print('------', datetime.now(), 'file is locked by', lock_holder)
             time.sleep(0.7)
 
+def is_within_one_hour(date, time):
+    event_datetime = datetime.strptime(f"{date} {time}", "%d.%m.%Y %H:%M")
+    return datetime.now() <= event_datetime + timedelta(hours=1)
+
+
+
 
 class UserContext:
     def __init__(self):
@@ -125,6 +129,7 @@ class UserContext:
 
 # Create an instance of UserContext
 CurUsrCont = UserContext()
+
 
 
 def schedule_refresher():
@@ -164,10 +169,20 @@ def schedule_refresher():
         curr_mn_games_list = schd[cr_year][cr_mn_id - 1]
         next_mn_games_list = schd[cr_year][cr_mn_id]
 
-    upcoming_games_list = [', '.join([format_date1(date), time, location]) for date, time, location, gdesc in upcoming_games_list if filter_past_dates(date)]  # upcoming_games_list is used for 3 buttons - ЗАПИСАТЬСЯ/ТЕКУЩИЙ СПИСОК/ОТМЕНА. this list consists of 2 mothns: current and next. past dates are excluded
+    #upcoming_games_list = [', '.join([format_date1(date), time, location]) for date, time, location, gdesc in upcoming_games_list if filter_past_dates(date)]  
+    
+    # upcoming_games_list is used for 3 buttons - ЗАПИСАТЬСЯ/ТЕКУЩИЙ СПИСОК/ОТМЕНА. this list consists of 2 mothns: current and next. past dates are excluded
+    upcoming_games_list = [
+    ', '.join([format_date1(date), time, location])
+    for date, time, location, gdesc in upcoming_games_list
+    if filter_past_dates(date) and is_within_one_hour(date, time)
+    ]
+    
     upcoming_games_list.sort()
     upcoming_games_list.append('Главное меню 📱')
 
+
+    ########################################################################################################################
     curr_mn_schedule_games_list = [', '.join([format_date1(date), time, location]) for date, time, location, gdec in curr_mn_games_list]
     next_mn_schedule_games_list = [', '.join([format_date1(date), time, location]) for date, time, location, gdesc in next_mn_games_list]
 
@@ -219,7 +234,7 @@ repl_err2 = '_______________________\n<b>Максимальное количес
 repl_err4 = 'Запись на следующую тренировку будет доступна завтра :)'
 repl_err5 = 'К сожалению ты не являешься участником группы. Пожалуйста, вступите в <a href="' + grp_for_appl_link + '">группу</a> для записи/отмены записи на тренировку &#9940;'
 
-repl_txt15 = '<b>Готово! Записал тебя на следующую тренировку☺\n\n❗ ПОЖАЛУЙСТА, НЕ ОПАЗДЫВАЙ ❗️</b>'
+repl_txt15 = '<b>Готово! Записал тебя на следующую тренировку☺</b>\n\n❗ НЕ ОПАЗДЫВАЙ ❗️\n❗️ ЕСЛИ НЕ ПОЛУЧАЕТСЯ ПРИЙТИ - ОТМЕНИ ЗАПИСЬ❗️\nЕСЛИ НЕ ПРИШЕЛ И НЕ ОТМЕНИЛ ЗАПИСЬ = 🌈'
 repl_err7 = 'OK &#128076;'
 repl_txt16 = '<b>Готово! Одна твоя запись отменена ❌</b>'
 rerepl_err8 = '<b>Не нашел твоей записи на тренировку 😕</b>'
