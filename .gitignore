@@ -8,6 +8,6 @@ jsons_data/*
 #ignore log files change
 logs/*
 
-#allpycache files
-//__pycache__/*
+
+# all pycache files
 __pycache__/*
