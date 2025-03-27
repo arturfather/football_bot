@@ -382,7 +382,7 @@ def application_handler(message, CurUsrCont):
         CurUsrCont.usr_desc_inp = None
         global lock_holder
         lock_holder = None
-        return
+
 
     
     else:
