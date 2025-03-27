@@ -11,3 +11,6 @@ logs/*
 
 # all pycache files
 __pycache__/*
+
+# all pycache files
+jsons_handlers/__pycache__

@@ -5,7 +5,7 @@ from telebot import types
 from jsons_handlers.jsons_handlers import json_reader, json_writer
 from datetime import timedelta
 
-ENV = 'PROD'
+ENV = 'UAT'
 
 
 # static files/variable difinition
@@ -278,6 +278,7 @@ keyboard2.add(*buttons2)
 # Define a function to handle ANY message
 @bot.message_handler(func=lambda message: True)
 def MSG_HANDLER(message):
+
     schedule_refresher()
     log_any_incm(message)
     print('------', datetime.now(), 'entered to INCOME msg handler------')
@@ -376,6 +377,11 @@ def application_handler(message, CurUsrCont):
         bot.send_message(chat_id=message.chat.id, text='У вас нет имени пользователя. Пожалуйста добавьте имя пользователя', parse_mode='HTML', disable_web_page_preview=True, reply_markup=keyboard1)
         with open('assets/no_nick.jpg', 'rb') as photo:
             bot.send_photo(chat_id=message.chat.id, photo=photo, caption='Настройки ➡️ Имя пользователя')
+        
+        CurUsrCont.usr_prm = None
+        CurUsrCont.usr_desc_inp = None
+        global lock_holder
+        lock_holder = None
         return
 
     
